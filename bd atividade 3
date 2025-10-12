@@ -1,0 +1,123 @@
+CREATE TABLE especie (
+  cd_especie INTEGER,
+  nm_especi VARCHAR(30),
+  PRIMARY KEY (cd_especie)
+);
+
+CREATE TABLE categoria (
+  cd_categoria INTEGER,
+  ds_categoria VARCHAR(50),
+  PRIMARY KEY (cd_categoria)
+);
+
+CREATE TABLE municipio (
+  cd_municipio INTEGER,
+  nm_municipio VARCHAR(50),
+  sg_uf CHAR(2),
+  PRIMARY KEY (cd_municipio)
+);
+
+CREATE TABLE endereco (
+  cd_endereco INTEGER,
+  ds_logradouro VARCHAR(50),
+  ds_complemento VARCHAR(50),
+  nm_bairro VARCHAR(30),
+  nr_cep CHAR(8),
+  cd_municipio INTEGER REFERENCES municipio(cd_municipio),
+  PRIMARY KEY (cd_endereco)
+);
+
+CREATE TABLE cliente (
+  cd_cliente INTEGER,
+  nm_cliente VARCHAR(50),
+  nr_telefone VARCHAR(15),
+  ds_email VARCHAR(50),
+  dt_nascimento DATE,
+  cd_endereco INTEGER REFERENCES endereco(cd_endereco),
+  PRIMARY KEY (cd_cliente)
+);
+
+CREATE TABLE prestador_servico (
+  cd_prestador INTEGER,
+  nm_prestador VARCHAR(50),
+  nr_telefone VARCHAR(15),
+  ds_email VARCHAR(50),
+  cd_endereco INTEGER REFERENCES endereco(cd_endereco),
+  PRIMARY KEY (cd_prestador)
+);
+
+CREATE TABLE raca (
+  cd_raca INTEGER,
+  nm_raca VARCHAR(50),
+  cd_especie INTEGER REFERENCES especie(cd_especie),
+  PRIMARY KEY (cd_raca)
+);
+
+CREATE TABLE produto (
+  cd_produto INTEGER,
+  nm_produto VARCHAR(50),
+  ds_produto VARCHAR(50),
+  vl_custo DECIMAL(8,2),
+  vl_venda DECIMAL(8,2),
+  qt_estoque INTEGER,
+  cd_categoria INTEGER REFERENCES categoria(cd_categoria),
+  PRIMARY KEY (cd_produto)
+);
+
+CREATE TABLE servico (
+  cd_servico INTEGER,
+  ds_servico VARCHAR(50),
+  vl_servico DECIMAL(6,2),
+  PRIMARY KEY (cd_servico)
+);
+
+CREATE TABLE animal (
+  cd_animal INTEGER,
+  nm_animal VARCHAR(50),
+  ds_animal VARCHAR(50),
+  dt_nascimento DATE,
+  tp_porte CHAR(1),
+  cd_raca INTEGER REFERENCES raca(cd_raca),
+  cd_cliente INTEGER REFERENCES cliente(cd_cliente),
+  PRIMARY KEY (cd_animal)
+);
+
+CREATE TABLE agendamento (
+  nr_agendamento INTEGER,
+  dt_agendamento DATE,
+  hr_agendamento TIME,
+  cd_prestador INTEGER REFERENCES prestador_servico(cd_prestador),
+  cd_cliente INTEGER REFERENCES cliente(cd_cliente),
+  cd_animal INTEGER REFERENCES animal(cd_animal),
+  PRIMARY KEY (nr_agendamento)
+);
+
+CREATE TABLE servico_prestador (
+  cd_prestador INTEGER REFERENCES prestador_servico(cd_prestador),
+  cd_servico INTEGER REFERENCES servico(cd_servico),
+  PRIMARY KEY (cd_prestador, cd_servico)
+);
+
+CREATE TABLE agendamento_servico (
+  nr_agendamento INTEGER REFERENCES agendamento(nr_agendamento),
+  cd_servico INTEGER REFERENCES servico(cd_servico),
+  qt_servico INTEGER,
+  vl_servico DECIMAL(6,2),
+  PRIMARY KEY (nr_agendamento, cd_servico)
+);
+
+CREATE TABLE nota_fiscal (
+  nr_nota_fiscal INTEGER,
+  dt_emissao DATE,
+  vl_total DECIMAL(8,2),
+  cd_cliente INTEGER REFERENCES cliente(cd_cliente),
+  PRIMARY KEY (nr_nota_fiscal)
+);
+
+CREATE TABLE item_nota_fiscal (
+  nr_nota_fiscal INTEGER REFERENCES nota_fiscal(nr_nota_fiscal),
+  cd_produto INTEGER REFERENCES produto(cd_produto),
+  qt_produto INTEGER,
+  vl_produto DECIMAL(8,2),
+  PRIMARY KEY (nr_nota_fiscal, cd_produto)
+);
