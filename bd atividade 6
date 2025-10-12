@@ -1,0 +1,65 @@
+SELECT p.nm_prestador, s.ds_servico
+FROM prestador_servico p
+JOIN servico_prestador sp ON p.cd_prestador = sp.cd_prestador
+JOIN servico s ON sp.cd_servico = s.cd_servico;
+
+SELECT c.nm_cliente, a.nm_animal, e.nm_especie, r.nm_raca
+FROM cliente c
+JOIN animal a ON c.cd_cliente = a.cd_cliente
+JOIN raca r ON a.cd_raca = r.cd_raca
+JOIN especie e ON r.cd_especie = e.cd_especie;
+
+SELECT nf.nr_notal_fiscal, p.nm_produto, inf.qt_produto, inf.vl_produto
+FROM nota_fiscal nf
+JOIN item_nota_fiscal inf ON nf.nr_notal_fiscal = inf.nr_notal_fiscal
+JOIN produto p ON inf.cd_produto = p.cd_produto;
+
+SELECT a.nm_animal, r.nm_raca, e.nm_especie
+FROM animal a
+JOIN raca r ON a.cd_raca = r.cd_raca
+JOIN especie e ON r.cd_especie = e.cd_especie
+WHERE r.nm_raca = 'Poodle';
+
+SELECT DISTINCT p.nm_prestador, s.ds_servico, s.vl_servico
+FROM prestador_servico p
+JOIN servico_prestador sp ON p.cd_prestador = sp.cd_prestador
+JOIN servico s ON sp.cd_servico = s.cd_servico
+WHERE s.vl_servico > 100;
+
+SELECT p.nm_prestador, COUNT(a.nr_agendamento) AS total_agendamentos
+FROM prestador_servico p
+JOIN agendamento a ON p.cd_prestador = a.cd_prestador
+GROUP BY p.nm_prestador;
+
+SELECT a.nr_agendamento, SUM(asv.vl_servico * asv.qt_servico) AS total_servicos
+FROM agendamento a
+JOIN agendamento_servico asv ON a.nr_agendamento = asv.nr_agendamento
+GROUP BY a.nr_agendamento;
+
+SELECT c.nm_cliente, COUNT(a.cd_animal) AS total_animais
+FROM cliente c
+LEFT JOIN animal a ON c.cd_cliente = a.cd_cliente
+GROUP BY c.nm_cliente;
+
+SELECT c.nm_cliente, SUM(nf.vl_total) AS total_vendas
+FROM cliente c
+JOIN nota_fiscal nf ON c.cd_cliente = nf.cd_cliente
+GROUP BY c.nm_cliente;
+
+SELECT p.nm_prestador, SUM(asv.vl_servico * asv.qt_servico) AS receita_total
+FROM prestador_servico p
+JOIN agendamento a ON p.cd_prestador = a.cd_prestador
+JOIN agendamento_servico asv ON a.nr_agendamento = asv.nr_agendamento
+GROUP BY p.nm_prestador;
+
+SELECT cat.ds_categoria, AVG(inf.vl_produto) AS valor_medio
+FROM categoria cat
+JOIN produto p ON cat.cd_categoria = p.cd_categoria
+JOIN item_nota_fiscal inf ON p.cd_produto = inf.cd_produto
+GROUP BY cat.ds_categoria;
+
+SELECT c.nm_cliente, COUNT(a.nr_agendamento) AS total_agendamentos
+FROM cliente c
+JOIN agendamento a ON c.cd_cliente = a.cd_cliente
+GROUP BY c.nm_cliente
+HAVING COUNT(a.nr_agendamento) > 2;
