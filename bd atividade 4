@@ -1,0 +1,60 @@
+SELECT prestador_servico.nm_prestador, servico.ds_servico
+FROM prestador_servico, servico_prestador, servico
+WHERE prestador_servico.cd_prestador = servico_prestador.cd_prestador
+  AND servico_prestador.cd_servico = servico.cd_servico;
+
+SELECT cliente.nm_cliente, animal.nm_animal, raca.nm_raca, especie.nm_especi
+FROM cliente, animal, raca, especie
+WHERE cliente.cd_cliente = animal.cd_cliente
+  AND animal.cd_raca = raca.cd_raca
+  AND raca.cd_especie = especie.cd_especie;
+
+SELECT nota_fiscal.nr_nota_fiscal, produto.nm_produto,
+       item_nota_fiscal.qt_produto, item_nota_fiscal.vl_produto
+FROM nota_fiscal, item_nota_fiscal, produto
+WHERE nota_fiscal.nr_nota_fiscal = item_nota_fiscal.nr_nota_fiscal
+  AND item_nota_fiscal.cd_produto = produto.cd_produto;
+
+SELECT animal.nm_animal, raca.nm_raca, especie.nm_especi
+FROM animal, raca, especie
+WHERE animal.cd_raca = raca.cd_raca
+  AND raca.cd_especie = especie.cd_especie
+  AND raca.nm_raca = 'Poodle';
+
+SELECT prestador_servico.nm_prestador, servico.ds_servico, servico.vl_servico
+FROM prestador_servico, servico_prestador, servico
+WHERE prestador_servico.cd_prestador = servico_prestador.cd_prestador
+  AND servico_prestador.cd_servico = servico.cd_servico
+  AND servico.vl_servico > 100;
+
+SELECT prestador_servico.nm_prestador, agendamento.nr_agendamento
+FROM prestador_servico, agendamento
+WHERE prestador_servico.cd_prestador = agendamento.cd_prestador;
+
+SELECT agendamento.nr_agendamento,
+       agendamento_servico.qt_servico, agendamento_servico.vl_servico
+FROM agendamento, agendamento_servico
+WHERE agendamento.nr_agendamento = agendamento_servico.nr_agendamento;
+
+SELECT cliente.nm_cliente, animal.nm_animal
+FROM cliente, animal
+WHERE cliente.cd_cliente = animal.cd_cliente;
+
+SELECT cliente.nm_cliente, nota_fiscal.nr_nota_fiscal, nota_fiscal.vl_total
+FROM cliente, nota_fiscal
+WHERE cliente.cd_cliente = nota_fiscal.cd_cliente;
+
+SELECT prestador_servico.nm_prestador, agendamento.nr_agendamento,
+       agendamento_servico.qt_servico, agendamento_servico.vl_servico
+FROM prestador_servico, agendamento, agendamento_servico
+WHERE prestador_servico.cd_prestador = agendamento.cd_prestador
+  AND agendamento.nr_agendamento = agendamento_servico.nr_agendamento;
+
+SELECT categoria.ds_categoria, produto.nm_produto, item_nota_fiscal.vl_produto
+FROM categoria, produto, item_nota_fiscal
+WHERE categoria.cd_categoria = produto.cd_categoria
+  AND produto.cd_produto = item_nota_fiscal.cd_produto;
+
+SELECT cliente.nm_cliente, agendamento.nr_agendamento
+FROM cliente, agendamento
+WHERE cliente.cd_cliente = agendamento.cd_cliente;
