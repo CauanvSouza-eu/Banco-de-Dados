@@ -1,0 +1,64 @@
+-- add PK
+ALTER TABLE marca
+	ADD PRIMARY KEY (cd_marca);
+
+ALTER TABLE combustivel
+	ADD PRIMARY KEY (cd_combustivel);
+	
+ALTER TABLE modelo
+	ADD PRIMARY KEY (cd_modelo);
+	
+ALTER TABLE proprietario
+	ADD PRIMARY KEY (cd_proprietario);
+	
+ALTER TABLE localidade
+	ADD PRIMARY KEY (cd_localidade);
+
+ALTER TABLE veiculo
+	ADD PRIMARY KEY (nr_placa);
+
+-- PK composta
+ALTER TABLE veiculo_combustivel
+	ADD PRIMARY KEY (cd_combustivel, nr_placa);
+	
+-- add FK de modelo --> marca
+ALTER TABLE modelo
+ADD FOREIGN KEY (cd_marca) REFERENCES marca(cd_marca);
+
+-- add FK de veiculo --> modelo
+ALTER TABLE veiculo
+ADD FOREIGN KEY (cd_modelo) REFERENCES marca(cd_modelo);
+
+-- add FK de proprietario --> localidade
+ALTER TABLE proprietario
+ADD FOREIGN KEY (cd_localidade) REFERENCES marca(cd_localidade);
+
+-- add FK de veiculo --> proprietario
+ALTER TABLE modelo
+ADD FOREIGN KEY (cd_proprietario) REFERENCES marca(cd_proprietario);
+
+-- add FK composta
+ALTER TABLE veiculo_combustivel
+ADD (FOREIGN KEY (nr_placa) REFERENCES veiculo(nr_placa)),
+ADD (FOREIGN KEY (cd_combustivel) REFERENCES combustivel(cd_combustivel));
+
+CREATE TABLE acessorio
+(cd_acessorio INTEGER,
+ ds_acessorio VARCHAR(50),
+ PRIMARY KEY (cd_acessorio)
+);
+
+CREATE TABLE cor 
+(cd_cor INTEGER,
+ ds_cor VARCHAR(30),
+ PRIMARY KEY (cd_cor)
+);
+
+ALTER TABLE veiculo
+	ADD COLUMN cd_cor INTEGER REFERENCES cor(cd_cor);
+	
+CREATE TABLE veiculo_acessorio
+(nr_placa CHAR(7) REFERENCES veiculo(nr_placa),
+ cd_acessorio INTEGER REFERENCES acessorio(cd_acessorio),
+ PRIMARY KEY (nr_placa, cd_acessorio)
+);
